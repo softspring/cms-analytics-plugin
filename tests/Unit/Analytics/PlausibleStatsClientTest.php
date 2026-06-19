@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Softspring\CmsAnalyticsPlugin\Tests\Unit\Analytics;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Softspring\CmsAnalyticsPlugin\Analytics\PlausibleConfiguration;
 use Softspring\CmsAnalyticsPlugin\Analytics\PlausibleStatsClient;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use const JSON_THROW_ON_ERROR;
 
 class PlausibleStatsClientTest extends TestCase
 {
@@ -17,9 +19,14 @@ class PlausibleStatsClientTest extends TestCase
         $httpClient = new MockHttpClient([
             new MockResponse(json_encode([
                 'results' => [
-                    ['metrics' => [10, 4, 6, 1.67, 25.5, 38]],
+                    ['metrics' => [10, 4, 6, 25.5, 38]],
                 ],
-            ], \JSON_THROW_ON_ERROR)),
+            ], JSON_THROW_ON_ERROR)),
+            new MockResponse(json_encode([
+                'results' => [
+                    ['metrics' => [1.67]],
+                ],
+            ], JSON_THROW_ON_ERROR)),
         ]);
         $client = new PlausibleStatsClient($httpClient, new InMemoryCache());
 
@@ -32,12 +39,12 @@ class PlausibleStatsClientTest extends TestCase
             'visitors' => 10,
             'visits' => 4,
             'pageviews' => 6,
-            'views_per_visit' => 1.67,
             'bounce_rate' => 25.5,
             'time_on_page' => 38,
+            'views_per_visit' => 1.67,
         ], $metrics);
         $this->assertSame($metrics, $cachedMetrics);
-        $this->assertSame(1, $httpClient->getRequestsCount());
+        $this->assertSame(2, $httpClient->getRequestsCount());
     }
 
     public function testItReturnsEmptyMetricsWhenConfigurationIsNotUsable(): void
@@ -65,7 +72,7 @@ class PlausibleStatsClientTest extends TestCase
             new InMemoryCache(),
         );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Plausible API returned HTTP 401 for path "/blog/post".');
 
         $client->getPageMetrics(new PlausibleConfiguration(true, 'https://plausible.io', 'secret', 'example.org'), '/blog/post', '30d');

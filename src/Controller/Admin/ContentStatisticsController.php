@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Softspring\CmsAnalyticsPlugin\Controller\Admin;
 
-use Softspring\CmsAnalyticsPlugin\Analytics\PageUrlResolver;
-use Softspring\CmsAnalyticsPlugin\Analytics\PlausibleConfigurationResolver;
-use Softspring\CmsAnalyticsPlugin\Analytics\PlausibleStatsClient;
+use Softspring\CmsAnalyticsPlugin\Analytics\ContentAnalyticsProvider;
 use Softspring\CmsBundle\Config\CmsConfig;
 use Softspring\CmsBundle\Manager\ContentManagerInterface;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ContentStatisticsController extends AbstractController
 {
@@ -22,10 +20,9 @@ class ContentStatisticsController extends AbstractController
     public function __construct(
         protected CmsConfig $cmsConfig,
         protected ContentManagerInterface $contentManager,
-        protected PageUrlResolver $pageUrlResolver,
-        protected PlausibleConfigurationResolver $plausibleConfigurationResolver,
-        protected PlausibleStatsClient $plausibleStatsClient,
-    ) {}
+        protected ContentAnalyticsProvider $contentAnalyticsProvider,
+    ) {
+    }
 
     public function statistics(Request $request): Response
     {
@@ -36,33 +33,8 @@ class ContentStatisticsController extends AbstractController
             $dateRange = '30d';
         }
 
-        $rows = [];
-        $totals = $this->plausibleStatsClient->emptyMetrics();
-
-        foreach ($this->pageUrlResolver->resolve($content) as $pageUrl) {
-            $configuration = $this->plausibleConfigurationResolver->resolve($pageUrl->site);
-            $metrics = $this->plausibleStatsClient->emptyMetrics();
-            $error = null;
-
-            if ($configuration->isUsable()) {
-                try {
-                    $metrics = $this->plausibleStatsClient->getPageMetrics($configuration, $pageUrl->path, $dateRange);
-                } catch (\Throwable $exception) {
-                    $error = $exception->getMessage();
-                }
-            }
-
-            foreach ($totals as $metric => $value) {
-                $totals[$metric] = (float) $totals[$metric] + (float) ($metrics[$metric] ?? 0);
-            }
-
-            $rows[] = [
-                'pageUrl' => $pageUrl,
-                'configuration' => $configuration,
-                'metrics' => $metrics,
-                'error' => $error,
-            ];
-        }
+        $rows = $this->contentAnalyticsProvider->getRows($content, $dateRange);
+        $totals = $this->contentAnalyticsProvider->buildTotals($rows);
 
         return $this->render('@SfsCmsAnalyticsPlugin/admin/content/statistics.html.twig', [
             'content' => $content,
@@ -96,8 +68,8 @@ class ContentStatisticsController extends AbstractController
     }
 
     /**
-     * @param array<int, array{metrics: array<string, int|float|null>}> $rows
-     * @param array<string, int|float|null> $totals
+     * @param  array<int, array{metrics: array<string, int|float|null>}> $rows
+     * @param  array<string, int|float|null>                             $totals
      * @return array<string, float>
      */
     private function buildSummary(array $rows, array $totals): array

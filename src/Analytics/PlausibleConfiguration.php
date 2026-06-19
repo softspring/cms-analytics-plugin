@@ -11,11 +11,23 @@ final readonly class PlausibleConfiguration
         public string $apiBaseUrl,
         public string $apiKey,
         public string $siteId,
-    ) {}
+    ) {
+    }
 
     public function isUsable(): bool
     {
         return $this->enabled && '' !== $this->apiKey && '' !== $this->siteId;
+    }
+
+    public function dashboardUrl(string $path): ?string
+    {
+        if (!$this->isUsable()) {
+            return null;
+        }
+
+        $encodedPath = str_replace('%2F', '/', rawurlencode($path));
+
+        return sprintf('%s/%s?f=is,page,%s', $this->apiBaseUrl, rawurlencode($this->siteId), $encodedPath);
     }
 
     /**

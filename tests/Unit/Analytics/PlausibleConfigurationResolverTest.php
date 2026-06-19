@@ -33,6 +33,7 @@ class PlausibleConfigurationResolverTest extends TestCase
         $this->assertSame('secret', $configuration->apiKey);
         $this->assertSame('example.org', $configuration->siteId);
         $this->assertTrue($configuration->isUsable());
+        $this->assertSame('https://plausible.example.org/example.org?f=is,page,/blog/post', $configuration->dashboardUrl('/blog/post'));
     }
 
     public function testItReturnsDisabledDefaultsWhenSiteHasNoAnalyticsConfiguration(): void
@@ -44,6 +45,7 @@ class PlausibleConfigurationResolverTest extends TestCase
         $this->assertSame('', $configuration->apiKey);
         $this->assertSame('', $configuration->siteId);
         $this->assertFalse($configuration->isUsable());
+        $this->assertNull($configuration->dashboardUrl('/blog/post'));
         $this->assertSame([
             'Plausible analytics is disabled for this site.',
             'Missing Plausible Stats API key.',

@@ -18,6 +18,14 @@ statistics:
         12mo: "Last 12 months"
         year: "This year"
 
+read_routes:
+    analytics:
+        title: "Statistics"
+        last_30_days: "Last 30 days"
+        summary: "%visits% visits · %visitors% unique visitors"
+        view:
+            link: "View statistics"
+
 metrics:
     pageviews: "Pageviews"
     visitors: "Visitors"
@@ -31,6 +39,10 @@ table:
     site: "Site"
     locale: "Locale"
     status: "Status"
+    actions: "Actions"
+
+actions:
+    view_plausible: "Plausible"
 
 status:
     ok: "OK"
