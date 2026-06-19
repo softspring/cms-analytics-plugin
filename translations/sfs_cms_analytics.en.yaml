@@ -1,0 +1,38 @@
+tabs_menu:
+    statistics: "Statistics"
+
+statistics:
+    meta:
+        title: "%name% statistics"
+    breadcrumb: "Statistics"
+    title: "Page statistics"
+    description: "Plausible metrics for each configured CMS URL of this content."
+    no_urls: "This content has no configured URLs to analyze."
+    totals_note: "Totals are summed across configured URLs. Unique visitors can be counted more than once when the same visitor viewed several URLs."
+    range:
+        label: "Range"
+        7d: "Last 7 days"
+        30d: "Last 30 days"
+        91d: "Last 91 days"
+        6mo: "Last 6 months"
+        12mo: "Last 12 months"
+        year: "This year"
+
+metrics:
+    pageviews: "Pageviews"
+    visitors: "Visitors"
+    visits: "Visits"
+    views_per_visit: "Views / visit"
+    bounce_rate: "Bounce rate"
+    time_on_page: "Time on page"
+
+table:
+    url: "URL"
+    site: "Site"
+    locale: "Locale"
+    status: "Status"
+
+status:
+    ok: "OK"
+    error: "Error"
+    not_configured: "Not configured"

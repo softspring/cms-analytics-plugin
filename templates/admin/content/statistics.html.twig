@@ -1,0 +1,108 @@
+{% trans_default_domain 'sfs_cms_analytics' %}
+
+{% extends '@SfsCms/admin_layout.html.twig' %}
+
+{% block title %}{{ 'statistics.meta.title'|trans({'%name%': content_entity.name}) }}{% endblock %}
+
+{% block breadcrums_content %}
+    {{ parent() }}
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_list') }}">{{ ('admin_'~content_type~'.list.breadcrumb')|trans({}, 'sfs_cms_contents') }}</a></li>
+    <li class="breadcrumb-item"><a href="{{ url('sfs_cms_admin_content_'~content_type~'_details', {'content': content_entity.id}) }}">{{ ('admin_'~content_type~'.read.breadcrumb')|trans({'%name%': content_entity.name}, 'sfs_cms_contents') }}</a></li>
+    <li class="breadcrumb-item active" aria-current="content">{{ 'statistics.breadcrumb'|trans }}</li>
+{% endblock breadcrums_content %}
+
+{% block content %}
+    {% include ['@content/'~content_type~'/admin/_content_title.html.twig', '@SfsCms/admin/content/_content_title.html.twig'] with {'current': 'statistics', 'content_type': content_type, 'content_entity': content_entity} %}
+    {% include ['@content/'~content_type~'/admin/_content_tabs.html.twig', '@SfsCms/admin/content/_content_tabs.html.twig'] with {'current': 'statistics', 'content': content, 'content_entity': content_entity} %}
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <h2 class="h4 mb-1">{{ 'statistics.title'|trans }}</h2>
+                <p class="text-body-secondary mb-0">{{ 'statistics.description'|trans }}</p>
+            </div>
+            <form method="get" class="d-flex align-items-center gap-2">
+                <label for="analytics-range" class="form-label mb-0 text-nowrap">{{ 'statistics.range.label'|trans }}</label>
+                <select id="analytics-range" name="range" class="form-select" onchange="this.form.submit()">
+                    {% for range in allowed_ranges %}
+                        <option value="{{ range }}" {{ range == date_range ? 'selected' : '' }}>{{ ('statistics.range.'~range)|trans }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        {% if rows is empty %}
+            <div class="alert alert-warning">{{ 'statistics.no_urls'|trans }}</div>
+        {% else %}
+            <div class="row g-3 mb-3">
+                <div class="col-12 col-md-4 col-xl-2">
+                    <div class="card h-100"><div class="card-body"><div class="text-body-secondary small">{{ 'metrics.pageviews'|trans }}</div><div class="h3 mb-0">{{ totals.pageviews|number_format(0, '.', ',') }}</div></div></div>
+                </div>
+                <div class="col-12 col-md-4 col-xl-2">
+                    <div class="card h-100"><div class="card-body"><div class="text-body-secondary small">{{ 'metrics.visitors'|trans }}</div><div class="h3 mb-0">{{ totals.visitors|number_format(0, '.', ',') }}</div></div></div>
+                </div>
+                <div class="col-12 col-md-4 col-xl-2">
+                    <div class="card h-100"><div class="card-body"><div class="text-body-secondary small">{{ 'metrics.visits'|trans }}</div><div class="h3 mb-0">{{ totals.visits|number_format(0, '.', ',') }}</div></div></div>
+                </div>
+                <div class="col-12 col-md-4 col-xl-2">
+                    <div class="card h-100"><div class="card-body"><div class="text-body-secondary small">{{ 'metrics.views_per_visit'|trans }}</div><div class="h3 mb-0">{{ summary.views_per_visit|number_format(2, '.', ',') }}</div></div></div>
+                </div>
+                <div class="col-12 col-md-4 col-xl-2">
+                    <div class="card h-100"><div class="card-body"><div class="text-body-secondary small">{{ 'metrics.bounce_rate'|trans }}</div><div class="h3 mb-0">{{ summary.bounce_rate|number_format(1, '.', ',') }}%</div></div></div>
+                </div>
+                <div class="col-12 col-md-4 col-xl-2">
+                    <div class="card h-100"><div class="card-body"><div class="text-body-secondary small">{{ 'metrics.time_on_page'|trans }}</div><div class="h3 mb-0">{{ summary.time_on_page|round }}s</div></div></div>
+                </div>
+            </div>
+
+            <div class="alert alert-info small">
+                {{ 'statistics.totals_note'|trans }}
+            </div>
+
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0 align-middle">
+                        <thead>
+                            <tr>
+                                <th>{{ 'table.url'|trans }}</th>
+                                <th>{{ 'table.site'|trans }}</th>
+                                <th>{{ 'table.locale'|trans }}</th>
+                                <th class="text-end">{{ 'metrics.pageviews'|trans }}</th>
+                                <th class="text-end">{{ 'metrics.visitors'|trans }}</th>
+                                <th class="text-end">{{ 'metrics.visits'|trans }}</th>
+                                <th class="text-end">{{ 'metrics.views_per_visit'|trans }}</th>
+                                <th class="text-end">{{ 'metrics.bounce_rate'|trans }}</th>
+                                <th class="text-end">{{ 'metrics.time_on_page'|trans }}</th>
+                                <th>{{ 'table.status'|trans }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                                <tr>
+                                    <td><a href="{{ row.pageUrl.url }}" target="_blank" rel="noopener noreferrer">{{ row.pageUrl.path }}</a></td>
+                                    <td>{{ row.pageUrl.site.id }}</td>
+                                    <td>{{ row.pageUrl.locale }}</td>
+                                    <td class="text-end">{{ row.metrics.pageviews|default(0)|number_format(0, '.', ',') }}</td>
+                                    <td class="text-end">{{ row.metrics.visitors|default(0)|number_format(0, '.', ',') }}</td>
+                                    <td class="text-end">{{ row.metrics.visits|default(0)|number_format(0, '.', ',') }}</td>
+                                    <td class="text-end">{{ row.metrics.views_per_visit|default(0)|number_format(2, '.', ',') }}</td>
+                                    <td class="text-end">{{ row.metrics.bounce_rate|default(0)|number_format(1, '.', ',') }}%</td>
+                                    <td class="text-end">{{ row.metrics.time_on_page|default(0)|round }}s</td>
+                                    <td>
+                                        {% if row.error %}
+                                            <span class="badge text-bg-danger" title="{{ row.error }}">{{ 'status.error'|trans }}</span>
+                                        {% elseif not row.configuration.usable %}
+                                            <span class="badge text-bg-secondary" title="{{ row.configuration.missingReasons|join(' ') }}">{{ 'status.not_configured'|trans }}</span>
+                                        {% else %}
+                                            <span class="badge text-bg-success">{{ 'status.ok'|trans }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

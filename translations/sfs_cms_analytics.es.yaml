@@ -1,0 +1,38 @@
+tabs_menu:
+    statistics: "Estadísticas"
+
+statistics:
+    meta:
+        title: "Estadísticas de %name%"
+    breadcrumb: "Estadísticas"
+    title: "Estadísticas de la página"
+    description: "Métricas de Plausible para cada URL CMS configurada en este contenido."
+    no_urls: "Este contenido no tiene URLs configuradas para analizar."
+    totals_note: "Los totales se suman entre URLs configuradas. Los visitantes únicos pueden contarse más de una vez si el mismo visitante vio varias URLs."
+    range:
+        label: "Periodo"
+        7d: "Últimos 7 días"
+        30d: "Últimos 30 días"
+        91d: "Últimos 91 días"
+        6mo: "Últimos 6 meses"
+        12mo: "Últimos 12 meses"
+        year: "Este año"
+
+metrics:
+    pageviews: "Páginas vistas"
+    visitors: "Visitantes"
+    visits: "Visitas"
+    views_per_visit: "Vistas / visita"
+    bounce_rate: "Rebote"
+    time_on_page: "Tiempo en página"
+
+table:
+    url: "URL"
+    site: "Site"
+    locale: "Locale"
+    status: "Estado"
+
+status:
+    ok: "OK"
+    error: "Error"
+    not_configured: "Sin configurar"

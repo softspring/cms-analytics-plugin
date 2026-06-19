@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Softspring\CmsAnalyticsPlugin\:
+        resource: '../../src/*'
+        exclude: '../../src/DependencyInjection/*'
+
+    Softspring\CmsAnalyticsPlugin\Admin\Menu\ContentMenuProvider:
+        tags: [ 'sfs_cms.admin_menu.menu_provider' ]
+
+    Softspring\CmsAnalyticsPlugin\Admin\Routing\ContentTypeRoutingProvider:
+        tags: [ 'sfs_cms.routing_provider' ]
+
+    sfs_cms.analytics_plugin.admin.content_statistics.controller:
+        class: Softspring\CmsAnalyticsPlugin\Controller\Admin\ContentStatisticsController
+        public: true
