@@ -99,9 +99,9 @@
                                         {% endif %}
                                     </td>
                                     <td class="text-end">
-                                        {% set plausible_url = row.configuration.dashboardUrl(row.pageUrl.path) %}
-                                        {% if plausible_url %}
-                                            <a href="{{ plausible_url }}" target="_blank" rel="noopener noreferrer">{{ 'actions.view_plausible'|trans }}</a>
+                                        {% set dashboard_url = row.configuration.dashboardUrl(row.pageUrl.path) %}
+                                        {% if dashboard_url %}
+                                            <a href="{{ dashboard_url }}" target="_blank" rel="noopener noreferrer">{{ 'actions.view_dashboard'|trans }}</a>
                                         {% endif %}
                                     </td>
                                 </tr>

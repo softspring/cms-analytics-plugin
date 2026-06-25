@@ -8,6 +8,22 @@ services:
         resource: '../../src/*'
         exclude: '../../src/DependencyInjection/*'
 
+    Softspring\CmsAnalyticsPlugin\Analytics\StatisticsProviderChain:
+        public: true
+        arguments:
+            $providers: !tagged_iterator sfs_cms_analytics.statistics_provider
+
+    Softspring\CmsAnalyticsPlugin\Analytics\PlausibleStatisticsProvider:
+        tags:
+            - { name: 'sfs_cms_analytics.statistics_provider' }
+
+    Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsStatisticsProvider:
+        tags:
+            - { name: 'sfs_cms_analytics.statistics_provider', priority: 20 }
+
+    Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsAccessTokenProviderInterface:
+        alias: Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsAccessTokenProvider
+
     Softspring\CmsAnalyticsPlugin\Admin\Menu\ContentMenuProvider:
         tags: [ 'sfs_cms.admin_menu.menu_provider' ]
 

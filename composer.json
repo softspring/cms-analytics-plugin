@@ -16,6 +16,9 @@
         "symfony/http-kernel": "^6.4 || ^7.4 || ^8.0",
         "symfony/routing": "^6.4 || ^7.4 || ^8.0"
     },
+    "suggest": {
+        "google/auth": "Required only when a site uses the google_analytics_4 analytics driver."
+    },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.50",
         "friendsofphp/php-cs-fixer": "^3.94",

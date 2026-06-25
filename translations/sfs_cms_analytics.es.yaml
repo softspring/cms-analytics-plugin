@@ -42,7 +42,7 @@ table:
     actions: "Acciones"
 
 actions:
-    view_plausible: "Plausible"
+    view_dashboard: "Analytics"
 
 status:
     ok: "OK"

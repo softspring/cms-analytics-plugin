@@ -10,9 +10,9 @@
 
 > **Experimental package:** this plugin is in active development and its configuration, analytics provider integration, UI, and extension points may change before a stable release.
 
-`softspring/cms-analytics-plugin` adds page-level analytics to Armonic CMS administration.
+`softspring/cms-analytics-plugin` adds page-level analytics to Armonic CMS administration and exposes a provider-agnostic statistics API for other CMS plugins.
 
-It resolves the configured URLs for a CMS content item, queries Plausible Analytics for each URL, and shows totals and per-URL metrics in the content administration screen.
+It resolves the configured URLs for a CMS content item, queries the configured statistics provider for each URL, and shows totals and per-URL metrics in the content administration screen. The plugin ships a Plausible provider; projects can add GA4 or other providers behind the same statistics API.
 
 ## Installation
 
@@ -33,12 +33,18 @@ return [
 
 ## Configuration
 
-Each CMS site reads Plausible configuration from `site.extra.analytics.plausible`:
+Each CMS site reads provider configuration from `site.extra.analytics`.
+
+Select the active provider with `site.extra.analytics.driver`. When no driver is set, the plugin uses the Plausible
+provider as the default.
+
+Plausible configuration lives under `site.extra.analytics.plausible`:
 
 ```yaml
 site:
     extra:
         analytics:
+            driver: plausible
             plausible:
                 enabled: true
                 api_base_url: '%env(PLAUSIBLE_API_BASE_URL)%'
@@ -51,11 +57,33 @@ Set real keys in local or deployment secrets, not in committed files.
 
 The default Plausible API base URL is `https://plausible.io`. Override `api_base_url` only for self-hosted Plausible installations or compatible endpoints.
 
-Google Analytics integration is planned for a future version.
+Google Analytics 4 configuration lives under `site.extra.analytics.google_analytics_4`:
+
+```yaml
+site:
+    extra:
+        analytics:
+            driver: google_analytics_4
+            google_analytics_4:
+                enabled: true
+                property_id: '%env(GA4_PROPERTY_ID)%'
+                credentials_json: '%env(GA4_CREDENTIALS_JSON)%'
+                credentials_path: '%env(GA4_CREDENTIALS_PATH)%'
+                dashboard_base_url: 'https://analytics.google.com/analytics/web'
+```
+
+`property_id` is the numeric GA4 property id. GA4 support needs the optional `google/auth` package:
+
+```bash
+composer require google/auth
+```
+
+Use either `credentials_json`, `credentials_path`, or neither. When both credential fields are empty, Google application
+default credentials are used. The selected identity must have read access to the GA4 property.
 
 ## Usage
 
-The plugin adds a `Statistics` tab to every CMS content type. It queries Plausible once per configured URL of the content
+The plugin adds a `Statistics` tab to every CMS content type. It queries the statistics provider once per configured URL of the content
 and caches each response for 15 minutes through Symfony cache.
 
 Supported ranges are:
@@ -69,9 +97,13 @@ Supported ranges are:
 
 ## Extension Points
 
-Replace `Softspring\CmsAnalyticsPlugin\Analytics\PlausibleConfigurationResolver` when a project stores analytics settings outside CMS site configuration.
+Add custom analytics providers by implementing `Softspring\CmsAnalyticsPlugin\Analytics\StatisticsProviderInterface` and tagging the service with `sfs_cms_analytics.statistics_provider`.
 
-Replace `Softspring\CmsAnalyticsPlugin\Analytics\PlausibleStatsClient` when a project needs a different analytics provider, cache policy, or Plausible query shape.
+Replace `Softspring\CmsAnalyticsPlugin\Analytics\PlausibleConfigurationResolver` when a project stores Plausible settings outside CMS site configuration.
+
+Replace `Softspring\CmsAnalyticsPlugin\Analytics\PlausibleStatsClient` when a project needs a different Plausible cache policy or query shape.
+
+Replace `Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsConfigurationResolver`, `Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsAccessTokenProvider`, or `Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsDataClient` when a project needs custom GA4 configuration, authentication, or query behavior.
 
 Override Twig templates through Symfony template resolution when the admin screen needs project-specific layout or metrics.
 

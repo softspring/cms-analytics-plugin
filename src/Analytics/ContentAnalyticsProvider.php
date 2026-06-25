@@ -7,19 +7,20 @@ namespace Softspring\CmsAnalyticsPlugin\Analytics;
 use Softspring\CmsBundle\Model\ContentInterface;
 use Throwable;
 
+use function array_fill_keys;
+
 class ContentAnalyticsProvider
 {
     public function __construct(
         protected PageUrlResolver $pageUrlResolver,
-        protected PlausibleConfigurationResolver $plausibleConfigurationResolver,
-        protected PlausibleStatsClient $plausibleStatsClient,
+        protected StatisticsProviderChain $statisticsProviderChain,
     ) {
     }
 
     /**
      * @return array<int, array{
      *     pageUrl: PageUrl,
-     *     configuration: PlausibleConfiguration,
+     *     configuration: StatisticsConfiguration,
      *     metrics: array<string, int|float|null>,
      *     error: string|null,
      * }>
@@ -29,13 +30,19 @@ class ContentAnalyticsProvider
         $rows = [];
 
         foreach ($this->pageUrlResolver->resolve($content) as $pageUrl) {
-            $configuration = $this->plausibleConfigurationResolver->resolve($pageUrl->site);
-            $metrics = $this->plausibleStatsClient->emptyMetrics();
+            $provider = $this->statisticsProviderChain->getProvider($pageUrl->site, $pageUrl->path);
+            $configuration = $provider?->resolveConfiguration($pageUrl->site, $pageUrl->path) ?? new StatisticsConfiguration(
+                provider: 'none',
+                enabled: false,
+                usable: false,
+                missingReasons: ['No analytics statistics provider is configured.'],
+            );
+            $metrics = $this->emptyMetrics();
             $error = null;
 
-            if ($configuration->isUsable()) {
+            if ($provider && $configuration->usable) {
                 try {
-                    $metrics = $this->plausibleStatsClient->getPageMetrics($configuration, $pageUrl->path, $dateRange);
+                    $metrics = $provider->getSiteMetrics($pageUrl->site, $dateRange, $pageUrl->path);
                 } catch (Throwable $exception) {
                     $error = $exception->getMessage();
                 }
@@ -59,7 +66,7 @@ class ContentAnalyticsProvider
      */
     public function buildTotals(array $rows): array
     {
-        $totals = $this->plausibleStatsClient->emptyMetrics();
+        $totals = $this->emptyMetrics();
 
         foreach ($rows as $row) {
             foreach ($totals as $metric => $value) {
@@ -68,5 +75,13 @@ class ContentAnalyticsProvider
         }
 
         return $totals;
+    }
+
+    /**
+     * @return array<string, int|float|null>
+     */
+    private function emptyMetrics(): array
+    {
+        return array_fill_keys(StatisticsMetrics::ALL, 0);
     }
 }
