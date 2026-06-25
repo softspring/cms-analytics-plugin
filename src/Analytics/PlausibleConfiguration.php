@@ -11,8 +11,7 @@ final readonly class PlausibleConfiguration
         public string $apiBaseUrl,
         public string $apiKey,
         public string $siteId,
-    ) {
-    }
+    ) {}
 
     public function isUsable(): bool
     {

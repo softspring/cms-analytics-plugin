@@ -27,8 +27,7 @@ class PlausibleStatsClient
     public function __construct(
         protected HttpClientInterface $httpClient,
         protected CacheInterface $cache,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, int|float|null>
@@ -85,9 +84,9 @@ class PlausibleStatsClient
             ];
         }
 
-        $response = $this->httpClient->request('POST', $configuration->apiBaseUrl.'/api/v2/query', [
+        $response = $this->httpClient->request('POST', $configuration->apiBaseUrl . '/api/v2/query', [
             'headers' => [
-                'Authorization' => 'Bearer '.$configuration->apiKey,
+                'Authorization' => 'Bearer ' . $configuration->apiKey,
                 'Content-Type' => 'application/json',
             ],
             'json' => $payload,
@@ -130,7 +129,7 @@ class PlausibleStatsClient
             return $this->emptyMetrics();
         }
 
-        $cacheKey = 'sfs_cms_analytics_plausible_'.hash('sha256', $configuration->apiBaseUrl.'|'.$configuration->siteId.'|'.$path.'|'.$dateRange);
+        $cacheKey = 'sfs_cms_analytics_plausible_' . hash('sha256', $configuration->apiBaseUrl . '|' . $configuration->siteId . '|' . $path . '|' . $dateRange);
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($configuration, $path, $dateRange): array {
             $item->expiresAfter(900);
@@ -146,9 +145,9 @@ class PlausibleStatsClient
      */
     private function fetchAggregateMetrics(PlausibleConfiguration $configuration, string $dateRange, array $metricNames): array
     {
-        $response = $this->httpClient->request('POST', $configuration->apiBaseUrl.'/api/v2/query', [
+        $response = $this->httpClient->request('POST', $configuration->apiBaseUrl . '/api/v2/query', [
             'headers' => [
-                'Authorization' => 'Bearer '.$configuration->apiKey,
+                'Authorization' => 'Bearer ' . $configuration->apiKey,
                 'Content-Type' => 'application/json',
             ],
             'json' => [
@@ -200,9 +199,9 @@ class PlausibleStatsClient
      */
     private function fetchMetrics(PlausibleConfiguration $configuration, string $path, string $dateRange, array $metricNames, string $filterDimension): array
     {
-        $response = $this->httpClient->request('POST', $configuration->apiBaseUrl.'/api/v2/query', [
+        $response = $this->httpClient->request('POST', $configuration->apiBaseUrl . '/api/v2/query', [
             'headers' => [
-                'Authorization' => 'Bearer '.$configuration->apiKey,
+                'Authorization' => 'Bearer ' . $configuration->apiKey,
                 'Content-Type' => 'application/json',
             ],
             'json' => [

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Softspring\CmsAnalyticsPlugin;
 
 use Softspring\CmsBundle\Plugin\SfsCmsPlugin;
+
 use function dirname;
 
 class SfsCmsAnalyticsPlugin extends SfsCmsPlugin

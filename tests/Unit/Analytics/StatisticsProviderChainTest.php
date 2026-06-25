@@ -56,8 +56,7 @@ final readonly class TestStatisticsProvider implements StatisticsProviderInterfa
     public function __construct(
         private string $name,
         private bool $usable,
-    ) {
-    }
+    ) {}
 
     public function getName(): string
     {

@@ -13,8 +13,7 @@ class AnalyticsExtension extends AbstractExtension
 {
     public function __construct(
         protected ContentAnalyticsProvider $contentAnalyticsProvider,
-    ) {
-    }
+    ) {}
 
     public function getFunctions(): array
     {

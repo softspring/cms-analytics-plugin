@@ -17,8 +17,7 @@ final readonly class StatisticsConfiguration
         public array $missingReasons = [],
         public ?string $dashboardUrl = null,
         public array $context = [],
-    ) {
-    }
+    ) {}
 
     public function isUsable(): bool
     {

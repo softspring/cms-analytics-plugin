@@ -14,8 +14,7 @@ final readonly class GoogleAnalyticsConfiguration
         public ?string $credentialsJson = null,
         public ?string $credentialsPath = null,
         public string $dashboardBaseUrl = 'https://analytics.google.com/analytics/web',
-    ) {
-    }
+    ) {}
 
     public function isUsable(): bool
     {
@@ -44,6 +43,6 @@ final readonly class GoogleAnalyticsConfiguration
             return null;
         }
 
-        return rtrim($this->dashboardBaseUrl, '/').'/#/p'.$this->propertyId.'/reports/intelligenthome';
+        return rtrim($this->dashboardBaseUrl, '/') . '/#/p' . $this->propertyId . '/reports/intelligenthome';
     }
 }

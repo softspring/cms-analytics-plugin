@@ -11,8 +11,7 @@ final class GoogleAnalyticsStatisticsProvider implements StatisticsProviderInter
     public function __construct(
         private readonly GoogleAnalyticsConfigurationResolver $configurationResolver,
         private readonly GoogleAnalyticsDataClient $dataClient,
-    ) {
-    }
+    ) {}
 
     public function getName(): string
     {

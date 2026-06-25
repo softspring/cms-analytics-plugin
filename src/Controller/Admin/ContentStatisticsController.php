@@ -21,8 +21,7 @@ class ContentStatisticsController extends AbstractController
         protected CmsConfig $cmsConfig,
         protected ContentManagerInterface $contentManager,
         protected ContentAnalyticsProvider $contentAnalyticsProvider,
-    ) {
-    }
+    ) {}
 
     public function statistics(Request $request): Response
     {

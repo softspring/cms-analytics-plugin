@@ -27,7 +27,7 @@ final class GoogleAnalyticsConfigurationResolverTest extends TestCase
             ],
         ]);
 
-        $configuration = (new GoogleAnalyticsConfigurationResolver())->resolve($site);
+        $configuration = new GoogleAnalyticsConfigurationResolver()->resolve($site);
 
         $this->assertTrue($configuration->enabled);
         $this->assertSame('123456789', $configuration->propertyId);
@@ -43,7 +43,7 @@ final class GoogleAnalyticsConfigurationResolverTest extends TestCase
         $site = $this->createMock(SiteInterface::class);
         $site->method('getConfig')->willReturn([]);
 
-        $configuration = (new GoogleAnalyticsConfigurationResolver())->resolve($site);
+        $configuration = new GoogleAnalyticsConfigurationResolver()->resolve($site);
 
         $this->assertFalse($configuration->enabled);
         $this->assertSame('', $configuration->propertyId);

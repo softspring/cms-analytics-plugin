@@ -14,8 +14,7 @@ class PlausibleStatisticsProvider implements StatisticsProviderInterface
     public function __construct(
         private readonly PlausibleConfigurationResolver $configurationResolver,
         private readonly PlausibleStatsClient $statsClient,
-    ) {
-    }
+    ) {}
 
     public function getName(): string
     {
@@ -30,7 +29,7 @@ class PlausibleStatisticsProvider implements StatisticsProviderInterface
         if (null !== $path) {
             $dashboardUrl = $configuration->dashboardUrl($path);
         } elseif ($configuration->isUsable()) {
-            $dashboardUrl = rtrim($configuration->apiBaseUrl, '/').'/'.rawurlencode($configuration->siteId);
+            $dashboardUrl = rtrim($configuration->apiBaseUrl, '/') . '/' . rawurlencode($configuration->siteId);
         }
 
         return new StatisticsConfiguration(

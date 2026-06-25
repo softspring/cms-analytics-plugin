@@ -11,7 +11,7 @@ use Softspring\CmsAnalyticsPlugin\Analytics\GoogleAnalyticsDataClient;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
-require_once __DIR__.'/InMemoryCache.php';
+require_once __DIR__ . '/InMemoryCache.php';
 
 final class GoogleAnalyticsDataClientTest extends TestCase
 {

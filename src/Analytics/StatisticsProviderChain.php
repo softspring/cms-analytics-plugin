@@ -18,8 +18,7 @@ class StatisticsProviderChain
      */
     public function __construct(
         private readonly iterable $providers,
-    ) {
-    }
+    ) {}
 
     public function getProvider(SiteInterface $site, ?string $path = null): ?StatisticsProviderInterface
     {

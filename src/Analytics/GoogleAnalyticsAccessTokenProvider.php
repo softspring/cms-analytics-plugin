@@ -25,13 +25,12 @@ final class GoogleAnalyticsAccessTokenProvider implements GoogleAnalyticsAccessT
 
     public function __construct(
         private readonly CacheInterface $cache,
-    ) {
-    }
+    ) {}
 
     public function getAccessToken(GoogleAnalyticsConfiguration $configuration): string
     {
         $credentials = $this->buildCredentials($configuration);
-        $cacheKey = 'sfs_cms_analytics_ga4_access_token_'.hash('sha256', $this->credentialsCacheKey($credentials) ?: $configuration->propertyId);
+        $cacheKey = 'sfs_cms_analytics_ga4_access_token_' . hash('sha256', $this->credentialsCacheKey($credentials) ?: $configuration->propertyId);
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($credentials): string {
             $item->expiresAfter(3300);

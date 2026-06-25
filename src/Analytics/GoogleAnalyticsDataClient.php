@@ -39,8 +39,7 @@ final class GoogleAnalyticsDataClient
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
         private readonly GoogleAnalyticsAccessTokenProviderInterface $accessTokenProvider,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<string, int|float|null>
@@ -63,7 +62,7 @@ final class GoogleAnalyticsDataClient
             return $this->emptyMetrics();
         }
 
-        $cacheKey = 'sfs_cms_analytics_ga4_'.hash('sha256', $configuration->propertyId.'|'.$path.'|'.$dateRange);
+        $cacheKey = 'sfs_cms_analytics_ga4_' . hash('sha256', $configuration->propertyId . '|' . $path . '|' . $dateRange);
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($configuration, $path, $dateRange): array {
             $item->expiresAfter(900);
@@ -123,7 +122,7 @@ final class GoogleAnalyticsDataClient
         return [
             'dateRanges' => [$this->resolveDateRange($dateRange)],
             'metrics' => array_map(
-                static fn (string $metric): array => ['name' => self::METRIC_MAP[$metric]],
+                static fn(string $metric): array => ['name' => self::METRIC_MAP[$metric]],
                 $metricNames,
             ),
         ];
@@ -160,7 +159,7 @@ final class GoogleAnalyticsDataClient
             sprintf('%s/properties/%s:runReport', self::API_BASE_URL, $configuration->propertyId),
             [
                 'headers' => [
-                    'Authorization' => 'Bearer '.$this->accessTokenProvider->getAccessToken($configuration),
+                    'Authorization' => 'Bearer ' . $this->accessTokenProvider->getAccessToken($configuration),
                     'Content-Type' => 'application/json',
                 ],
                 'json' => $payload,

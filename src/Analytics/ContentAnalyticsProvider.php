@@ -14,8 +14,7 @@ class ContentAnalyticsProvider
     public function __construct(
         protected PageUrlResolver $pageUrlResolver,
         protected StatisticsProviderChain $statisticsProviderChain,
-    ) {
-    }
+    ) {}
 
     /**
      * @return array<int, array{
