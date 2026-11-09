@@ -14,6 +14,10 @@
 
 It resolves the configured URLs for a CMS content item, queries the configured statistics provider for each URL, and shows totals and per-URL metrics in the content administration screen. The plugin ships a Plausible provider; projects can add GA4 or other providers behind the same statistics API.
 
+## Documentation
+
+[Armonic documentation](https://armonic.softspring.es/6.0/bundles/cms-analytics-plugin)
+
 ## Installation
 
 ```bash
