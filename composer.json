@@ -5,7 +5,7 @@
     "type": "sfs-cms-plugin",
     "require": {
         "php": ">=8.4",
-        "softspring/cms-bundle": "^6.0@dev",
+        "softspring/cms-bundle": "6.1.*@dev",
         "symfony/cache-contracts": "^3.5",
         "symfony/config": "^6.4 || ^7.4 || ^8.0",
         "symfony/dependency-injection": "^6.4 || ^7.4 || ^8.0",
@@ -48,7 +48,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-6.0": "6.0.x-dev"
+            "dev-6.0": "6.0.x-dev",
+            "dev-6.1": "6.1.x-dev"
         }
     },
     "scripts": {

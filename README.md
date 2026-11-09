@@ -2,11 +2,11 @@
 
 [![Latest Stable](https://img.shields.io/packagist/v/softspring/cms-analytics-plugin?label=stable&style=flat-square)](https://github.com/softspring/cms-analytics-plugin/releases)
 [![Latest Unstable](https://img.shields.io/packagist/v/softspring/cms-analytics-plugin?label=unstable&style=flat-square&include_prereleases)](https://github.com/softspring/cms-analytics-plugin/releases)
-[![License](https://img.shields.io/packagist/l/softspring/cms-analytics-plugin?style=flat-square)](https://github.com/softspring/cms-analytics-plugin/blob/6.0/LICENSE)
-[![PHP Version](https://img.shields.io/packagist/dependency-v/softspring/cms-analytics-plugin/php?style=flat-square)](https://github.com/softspring/cms-analytics-plugin/blob/6.0/composer.json)
+[![License](https://img.shields.io/packagist/l/softspring/cms-analytics-plugin?style=flat-square)](https://github.com/softspring/cms-analytics-plugin/blob/6.1/LICENSE)
+[![PHP Version](https://img.shields.io/packagist/dependency-v/softspring/cms-analytics-plugin/php?style=flat-square)](https://github.com/softspring/cms-analytics-plugin/blob/6.1/composer.json)
 [![Downloads](https://img.shields.io/packagist/dt/softspring/cms-analytics-plugin?style=flat-square)](https://packagist.org/packages/softspring/cms-analytics-plugin)
-[![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-analytics-plugin/ci.yml?branch=6.0&style=flat-square&label=CI)](https://github.com/softspring/cms-analytics-plugin/actions/workflows/ci.yml)
-[![Coverage](https://img.shields.io/codecov/c/github/softspring/cms-analytics-plugin?branch=6.0&style=flat-square)](https://app.codecov.io/gh/softspring/cms-analytics-plugin/tree/6.0)
+[![CI](https://img.shields.io/github/actions/workflow/status/softspring/cms-analytics-plugin/ci.yml?branch=6.1&style=flat-square&label=CI)](https://github.com/softspring/cms-analytics-plugin/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/softspring/cms-analytics-plugin?branch=6.1&style=flat-square)](https://app.codecov.io/gh/softspring/cms-analytics-plugin/tree/6.1)
 
 > **Experimental package:** this plugin is in active development and its configuration, analytics provider integration, UI, and extension points may change before a stable release.
 
@@ -16,12 +16,12 @@ It resolves the configured URLs for a CMS content item, queries the configured s
 
 ## Documentation
 
-Armonic usage documentation for this experimental package is planned for `6.1@dev`.
+Read the [experimental cms-analytics-plugin guide](https://armonic.softspring.es/6.1@dev/docs/bundles/cms-analytics-plugin).
 
 ## Installation
 
 ```bash
-composer require softspring/cms-analytics-plugin:^6.0@dev
+composer require softspring/cms-analytics-plugin:6.1.*@dev
 ```
 
 The plugin requires `softspring/cms-bundle`, Symfony HttpClient, and a cache service.
