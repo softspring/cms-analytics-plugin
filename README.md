@@ -16,7 +16,7 @@ It resolves the configured URLs for a CMS content item, queries the configured s
 
 ## Documentation
 
-Read the [experimental cms-analytics-plugin guide](https://armonic.softspring.es/6.1@dev/bundles/cms-analytics-plugin).
+Read the [experimental cms-analytics-plugin guide](https://armonic.softspring.es/6.1-dev/bundles/cms-analytics-plugin).
 
 ## Installation
 
