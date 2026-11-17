@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Softspring\CmsAnalyticsPlugin\Admin\Menu;
 
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 use Softspring\CmsBundle\Admin\Menu\AbstractContentMenuProvider;
 use Softspring\CmsBundle\Admin\Menu\MenuHelper;
 use Softspring\CmsBundle\Admin\Menu\MenuItem;
 use Softspring\CmsBundle\Config\Exception\InvalidContentException;
 
+#[AsTaggedItem(priority: 252)]
 class ContentMenuProvider extends AbstractContentMenuProvider
 {
     public static function getPriority(): int
